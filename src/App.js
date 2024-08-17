@@ -1,48 +1,56 @@
 import React from 'react';
 import {useState} from "react";
 
-function App() {
-    const courses = [
-        {
-            'id': '1',
-            'name': 'Lập trình cơ bản với python'
-        },
-        {
-            'id': '2',
-            'name': 'Lập trình cơ bản với C#'
-        },
-        {
-            'id': '3',
-            'name': 'Lập trình cơ bản với PHP'
+function App(key) {
+    const [value, setValue] = useState('');
+    const [listData, setListData] = useState(() => {
+        const storageData = JSON.parse(localStorage.getItem('listData'));
+        console.log(storageData);
+        if (storageData && storageData.length > 0) {
+            return storageData;
+        } else {
+            return [];
         }
-    ]
-    const [course, setCourse] = useState([]);
-
-    const chooseCourse = (id) => {
-        setCourse((prevCourse) => {
-            const isCheck = course.includes(id);
-            if (isCheck) {
-                return course.filter(item => item !== id)
-            } else {
-                return [...prevCourse, id];
-            }
-        })
+    });
+    const changeValue = (event) => {
+        setValue(event.target.value);
     }
-    console.log(course);
+
+    const addItem = () => {
+        if (value.trim() !== '') {
+            setListData((prevState) => {
+                localStorage.setItem('listData', JSON.stringify([...prevState, value]));
+                return [...prevState, value]
+            })
+
+            setValue('');
+        } else {
+            return alert('vui long nhap gia tri')
+        }
+    }
+
+    const removeItem = (index) => {
+        const newList = listData.filter((item, i) => i !== index)
+        localStorage.setItem('listData', JSON.stringify(newList));
+        setListData(newList)
+        return newList
+    }
     return (
-        <div style={{textAlign: 'center'}}>
-            {courses.map((item, index) => (<div key={index}>
-                <input
-                    checked={course.includes(item.id)}
-                    onChange={() => chooseCourse(item.id)}
-                    type='checkbox'/>
-                {item.name}
-            </div>))}
-            <div>
-                <button onClick={() => {
-                    console.log('id course: ', course);
-                }}> log course
-                </button>
+        <div style={{textAlign: 'center', marginTop: "30px"}} className={'root'}>
+            <input onChange={changeValue} value={value} type="text"/>
+            <br/>
+            <button onClick={addItem} style={{marginTop: "20px"}} className={'btn btn-submit'}>
+                ONCLICK
+            </button>
+            <div className={'list-data'}>
+                <ul>
+                    {listData.map((item, index) => (
+                        <li style={{listStyle: "none"}} key={index}>
+                            {item}
+                            <span onClick={() => removeItem(index)} style={{marginLeft: '15px'}}>X</span>
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     )
