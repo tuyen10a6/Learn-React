@@ -1,4 +1,5 @@
 import React from 'react';
+import {useState} from "react";
 
 function ProductItem(props) {
     console.log(props)
@@ -11,14 +12,22 @@ function ProductItem(props) {
 }
 
 function App() {
+    const [phone, setPhone] = useState([
+        'Iphone 15 Promax',
+        'Iphone 14 Promax',
+        'Iphone 13 Promax'
+    ])
+
+    const handleAddPhone = () => {
+        setPhone((prevState) => {
+            return [...prevState, 'Iphone 12 Promax', 'Iphone 11 Promax']
+        })
+    }
     return (
         <div>
-            <ProductItem title="Giới thiệu về Iphone 15 ProMax"
-                         productName="Iphone 15 ProMax"
-                         descriptionProduct="Iphone 15 ProMax ra mắt năm 2023"/>
-            <ProductItem title="Giới thiệu về Iphone 14 ProMax"
-                         productName="Iphone 14 ProMax"
-                         descriptionProduct="Iphone 15 ProMax ra mắt năm 2022"/>
+            <span> {JSON.stringify(phone)} </span>
+            <br/>
+            <button onClick={handleAddPhone}>CLICK</button>
         </div>
     )
 }
