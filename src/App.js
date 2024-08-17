@@ -1,33 +1,40 @@
 import React from 'react';
 import {useState} from "react";
-
-function ProductItem(props) {
-    console.log(props)
-    return (
-        <div className="item-product-blog">
-            <h1> {props.title}</h1>
-            <p> {props.productName}</p>
-        </div>
-    )
-}
+import {logDOM} from "@testing-library/react";
 
 function App() {
-    const [phone, setPhone] = useState([
-        'Iphone 15 Promax',
-        'Iphone 14 Promax',
-        'Iphone 13 Promax'
-    ])
-
-    const handleAddPhone = () => {
-        setPhone((prevState) => {
-            return [...prevState, 'Iphone 12 Promax', 'Iphone 11 Promax']
-        })
+    const courses = [
+        {
+            'id': '1',
+            'name': 'Lập trình cơ bản với python'
+        },
+        {
+            'id': '2',
+            'name': 'Lập trình cơ bản với C#'
+        },
+        {
+            'id': '3',
+            'name': 'Lập trình cơ bản với PHP'
+        }
+    ]
+    const [course, setCourse] = useState('2');
+    const chooseCourse = (id) => {
+        setCourse(id)
     }
     return (
-        <div>
-            <span> {JSON.stringify(phone)} </span>
-            <br/>
-            <button onClick={handleAddPhone}>CLICK</button>
+        <div style={{textAlign: 'center'}}>
+            {courses.map((item, index) => (<div key={index}>
+                <input
+                    checked={course === item.id}
+                    onChange={() => chooseCourse(item.id)}
+                    type='radio'/>
+                {item.name}
+            </div>))}
+            <div>
+                <button onClick={() => {
+                    console.log( 'id course: ', course);
+                }}> log course</button>
+            </div>
         </div>
     )
 }
