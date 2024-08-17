@@ -2,25 +2,31 @@ import Content from './Content'
 import {useState} from "react";
 import {useEffect} from "react";
 
-function App() {
 
-    const [value, setValue] = useState('');
-    const [post, setPost] = useState([]);
+const tabs = ['posts', 'comments', 'albums']
+
+function App() {
+    const [title, setTilte] = useState('')
+    const [posts, setPosts] = useState([])
+    const [type, setType] = useState('posts');
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/todos')
+        console.log(type)
+        fetch(`https://jsonplaceholder.typicode.com/${type}`)
             .then(res => res.json())
-            .then(posts => {
-                setPost(posts);
-            })
-    }, [])
+            .then(data => setPosts(data))
+    }, [type])
+
     return (
-        <div>
-            <input value={value} onChange={(e) => setValue(e.target.value)} type='text'/>
+        <div style={{textAlign: 'center'}}>
+            {tabs.map(tab => (<button style={type === tab ? {color: "blue"} : {}} onClick={() => setType(tab)}
+                                      key={tab}>{tab} </button>))}
             <ul>
-                {post.map((item, index) => (<li key={item.id}>{item.title}</li>))}
+                {posts.map((item, index) => (
+                    <li key={index}> {item.title || item.name}</li>
+                ))}
             </ul>
-        </div>
-    )
+        </div>)
+
 }
 
 export default App;
