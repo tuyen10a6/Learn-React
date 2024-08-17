@@ -1,6 +1,5 @@
 import React from 'react';
 import {useState} from "react";
-import {logDOM} from "@testing-library/react";
 
 function App() {
     const courses = [
@@ -17,23 +16,33 @@ function App() {
             'name': 'Lập trình cơ bản với PHP'
         }
     ]
-    const [course, setCourse] = useState('2');
+    const [course, setCourse] = useState([]);
+
     const chooseCourse = (id) => {
-        setCourse(id)
+        setCourse((prevCourse) => {
+            const isCheck = course.includes(id);
+            if (isCheck) {
+                return course.filter(item => item !== id)
+            } else {
+                return [...prevCourse, id];
+            }
+        })
     }
+    console.log(course);
     return (
         <div style={{textAlign: 'center'}}>
             {courses.map((item, index) => (<div key={index}>
                 <input
-                    checked={course === item.id}
+                    checked={course.includes(item.id)}
                     onChange={() => chooseCourse(item.id)}
-                    type='radio'/>
+                    type='checkbox'/>
                 {item.name}
             </div>))}
             <div>
                 <button onClick={() => {
-                    console.log( 'id course: ', course);
-                }}> log course</button>
+                    console.log('id course: ', course);
+                }}> log course
+                </button>
             </div>
         </div>
     )
