@@ -2,20 +2,18 @@ import React from 'react'
 import {useEffect, useState} from "react";
 
 function App() {
-    const [value, setValue] = useState(180)
+    const [count, setCount] = useState(1)
     useEffect(() => {
-        const timeId = setTimeout(() => {
-            setValue(prevState => {
-                console.log('value time: ', prevState - 1)
-                return prevState - 1;
-            })
-        }, 1000)
+        console.log('count:', count)
 
-        return () => clearTimeout(timeId)
+        return () => {
+            console.log('clean up:', count)
+        }
+    }, [count])
 
-    }, [value])
-    return (<div className={'app'}>
-        {value}
+    return (<div style={{textAlign: 'center'}} className={'app-name'}>
+        <h1>{count}</h1>
+        <button onClick={() => setCount(count + 1)}>onClick</button>
     </div>)
 }
 
