@@ -2,19 +2,27 @@ import React from 'react'
 import {useEffect, useState} from "react";
 
 function App() {
-    const [count, setCount] = useState(1)
-    useEffect(() => {
-        console.log('count:', count)
 
+
+    const [avatar, setAvatar] = useState('');
+    useEffect(() => {
         return () => {
-            console.log('clean up:', count)
+            avatar && URL.revokeObjectURL(avatar.preview);
         }
-    }, [count])
+    }, [avatar]);
+    const handleChangeAvatar = (e) => {
+        let file = e.target.files[0];
+        console.log(URL.createObjectURL(file));
+        file.preview = URL.createObjectURL(file);
+        setAvatar(file)
+
+    }
 
     return (<div style={{textAlign: 'center'}} className={'app-name'}>
-        <h1>{count}</h1>
-        <button onClick={() => setCount(count + 1)}>onClick</button>
-    </div>)
+            <input onChange={handleChangeAvatar} type="file"/>
+            <img width={'80px'} src={avatar.preview}/>
+        </div>
+    )
 }
 
 export default App;
