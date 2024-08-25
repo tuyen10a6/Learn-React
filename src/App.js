@@ -1,29 +1,41 @@
-import React from 'react'
-import {useEffect, useState} from "react";
+import React from 'react';
+import {useEffect} from 'react'
+import {useState} from 'react';
 
-const lession = [
+const data = [
     {
-        'id': 1,
-        'name': 'PHP ( Laravel)'
+        'id': '1',
+        'name': 'Lập trình cơ bản với PHP'
     },
     {
-        'id': 2,
-        'name': 'Javascript (React)'
+        'id': '2',
+        'name': 'Lập trình cơ bản với PYTHON'
     },
     {
-        'id': 3,
-        'name': 'Node.js'
+        'id': '3',
+        'name': 'Lập trình cơ bản với NodeJS'
     }
 ]
 
 function App() {
-    const [lessionId, setLessionId] = useState(1);
+    const [lesson, setLesson] = useState('1');
+    useEffect(() => {
+        const handleComment = ({detail}) => {
+            console.log(detail);
+        }
+
+        window.addEventListener(`lesson-${lesson}`, handleComment);
+
+        return (() => {
+            window.removeEventListener(`lesson-${lesson}`, handleComment);
+        })
+    }, [lesson])
     return (
-        <div className={'app-name'}>
+        <div>
             <ul>
-                {lession.map(item => (
-                    <li onClick={() => setLessionId(item.id)}
-                        style={{color: lessionId === item.id ? 'red' : 'black'}} key={item.id}>
+                {data.map((item) => (
+                    <li style={{color: item.id === lesson ? 'red' : 'black'}} onClick={() => setLesson(item.id)}
+                        key={item.id}>
                         {item.name}
                     </li>
                 ))}
