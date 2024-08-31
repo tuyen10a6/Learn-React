@@ -1,45 +1,31 @@
-import React from 'react';
-import {useEffect} from 'react'
-import {useState} from 'react';
-
-const data = [
-    {
-        'id': '1',
-        'name': 'Lập trình cơ bản với PHP'
-    },
-    {
-        'id': '2',
-        'name': 'Lập trình cơ bản với PYTHON'
-    },
-    {
-        'id': '3',
-        'name': 'Lập trình cơ bản với NodeJS'
-    }
-]
+import React, {useEffect} from 'react';
+import {useState, useRef} from "react";
 
 function App() {
-    const [lesson, setLesson] = useState('1');
+    const [count, setCount] = useState(60);
+    const timeId = useRef()
+    const prevCount = useRef()
+
     useEffect(() => {
-        const handleComment = ({detail}) => {
-            console.log(detail);
-        }
+        prevCount.current = count
+    }, [count]);
+    const handleStart = () => {
+        timeId.current = setInterval(() => {
+            setCount(prevCount => prevCount - 1)
+        }, 1000)
+        console.log(timeId)
+    }
 
-        window.addEventListener(`lesson-${lesson}`, handleComment);
-
-        return (() => {
-            window.removeEventListener(`lesson-${lesson}`, handleComment);
-        })
-    }, [lesson])
+    const handleStop = () => {
+        console.log(timeId)
+        clearInterval(timeId.current)
+    }
+    console.log(count, prevCount.current)
     return (
-        <div>
-            <ul>
-                {data.map((item) => (
-                    <li style={{color: item.id === lesson ? 'red' : 'black'}} onClick={() => setLesson(item.id)}
-                        key={item.id}>
-                        {item.name}
-                    </li>
-                ))}
-            </ul>
+        <div style={{padding: '20px'}}>
+            <h1>{count}</h1>
+            <button onClick={handleStart}>Start</button>
+            <button onClick={handleStop}>Stop</button>
         </div>
     )
 }
