@@ -1,31 +1,30 @@
-import React, {useEffect} from 'react';
-import {useState, useRef} from "react";
+import React, {useEffect, useRef, useState} from 'react';
 
 function App() {
-    const [count, setCount] = useState(60);
-    const timeId = useRef()
-    const prevCount = useRef()
+    const [count, setCount] = useState(0);
+    const countRef = useRef(0);
+    const ref = useRef(null);
+    const object = {
+        current: 0
+    }
 
     useEffect(() => {
-        prevCount.current = count
-    }, [count]);
-    const handleStart = () => {
-        timeId.current = setInterval(() => {
-            setCount(prevCount => prevCount - 1)
-        }, 1000)
-        console.log(timeId)
-    }
+        ref.current.focus();
+    }, []);
 
-    const handleStop = () => {
-        console.log(timeId)
-        clearInterval(timeId.current)
+
+    const handleClick = () => {
+        setCount(prev => prev + 1);
+        countRef.current = countRef.current + 1;
+        object.current = object.current + 1;
     }
-    console.log(count, prevCount.current)
-    return (
-        <div style={{padding: '20px'}}>
-            <h1>{count}</h1>
-            <button onClick={handleStart}>Start</button>
-            <button onClick={handleStop}>Stop</button>
+    console.log(ref)
+
+    console.log('count:' + count, 'countRef: ' + countRef.current, 'object.current:' + object.current);
+    return (<div>
+            <input type="text" ref={ref}/>
+            <button onClick={handleClick}>CLICK</button>
+            <p>{countRef.current}</p>
         </div>
     )
 }
