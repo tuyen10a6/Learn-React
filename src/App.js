@@ -1,30 +1,47 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
+
+
+const Post = ({post}) => {
+    console.log('Rendering Post ID:', post.id, 'name:', post.name)
+    return (
+        <div className={'post'}>
+            <h3> {post.id}</h3>
+            <p> {post.name}</p>
+        </div>
+    )
+}
+
+const Memo = React.memo(Post);
+
+const Posts = ({posts}) => {
+
+    return (
+        <div>
+            {posts.map(item => (
+                <Memo key={item.id} post={item}/>
+            ))}
+        </div>
+    )
+}
 
 function App() {
-    const [count, setCount] = useState(0);
-    const countRef = useRef(0);
-    const ref = useRef(null);
-    const object = {
-        current: 0
-    }
+    const [posts, setPosts] = useState([
+        {id: 1, name: 'Phạm Văn Ước'},
+        {id: 2, name: 'Cao Thị Nụ'},
+        {id: 3, name: 'Phạm Xuân Tuyển'},
+        {id: 4, name: 'Phạm Văn Khải'}
+    ])
 
     useEffect(() => {
-        ref.current.focus();
+        setTimeout(() => {
+            setPosts(prevPosts => [
+                ...prevPosts, {id: 5, name: 'Phạm Thị Minh Anh'}
+            ])
+        }, 2000)
     }, []);
-
-
-    const handleClick = () => {
-        setCount(prev => prev + 1);
-        countRef.current = countRef.current + 1;
-        object.current = object.current + 1;
-    }
-    console.log(ref)
-
-    console.log('count:' + count, 'countRef: ' + countRef.current, 'object.current:' + object.current);
-    return (<div>
-            <input type="text" ref={ref}/>
-            <button onClick={handleClick}>CLICK</button>
-            <p>{countRef.current}</p>
+    return (
+        <div>
+            <Posts posts={posts}/>
         </div>
     )
 }
